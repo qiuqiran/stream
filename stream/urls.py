@@ -22,7 +22,7 @@ from input import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.cover),
+    url(r'^$', views.admin_0),
     url(r'^index/$',views.index),
     url(r'^reptilian/login_action/$', views.login_action),
     url(r'^content_page/(\d+)/$',views.content_manage,name='content_manage'),#name=指向views里面
