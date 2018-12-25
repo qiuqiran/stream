@@ -1,12 +1,13 @@
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from input.models import Movie_list,Content
+from input.models import Movie_list,Content,Detailed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from urllib import request
 import requests
 import re
 from bs4 import BeautifulSoup
+import datetime
 
 
 
@@ -323,7 +324,36 @@ def breakfast_logout(request):
     return resp
 
 def breakfast1(request):
-    return render(request,'breakfast1.html')
+    '''统计页面'''
+    detailed = Detailed.objects.order_by('-id')
+    detailed_in = Detailed.objects.filter(type='收入').order_by('-id')
+    detailed_out = Detailed.objects.filter(type='支出').order_by('-id')
+
+    paginator = Paginator(detailed, 10)  # 每页展示数据数量
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(Paginator.num_pages)
+
+    return render(request, 'breakfast1.html', {'lists': contacts,'detailed_in':detailed_in,'detailed_out':detailed_out})
 
 def breakfast2(request):
+    '''新增页面'''
     return render(request,'breakfast2.html')
+
+def breakfast_create(request,id):
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    if request.method == 'POST':
+
+
+        xie = Detailed(type=2,store='岗厦C',price=id,remark='25支出',create_time=now)
+        xie.save()
+        resp = HttpResponseRedirect('/breakfast1/')  # HttpResponseRedirect，它可以对路径进行重定向
+        return resp
+    else:
+        resp = HttpResponseRedirect('/breakfast1/')  # HttpResponseRedirect，它可以对路径进行重定向
+        return resp
+
