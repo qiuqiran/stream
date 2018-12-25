@@ -134,6 +134,8 @@ def newspaper(request,k):
     shorts = Content.objects.filter(mid=str(k))
     return render(request, 'newspaper.html', {'shorts': shorts})
 
+
+
 #报错入口
 def page_not_found(request):
     return render(request,'404.html')
@@ -291,3 +293,37 @@ def film(request):
         contacts = paginator.page(Paginator.num_pages)
 
     return render(request,'film.html',{'lists':contacts})
+
+
+
+# 早餐车项目
+
+def breakfast(request):
+    return render(request,'breakfast.html')
+
+def breakfast_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)  # 登录
+            request.session['user'] = username  # 将 session 信息记录到浏览器
+            resp = HttpResponseRedirect('/breakfast1/')  # HttpResponseRedirect，它可以对路径进行重定向
+            return resp
+        else:
+            return render(request, 'breakfast.html', {'error': '不是账号错了就是密码错了!'})
+    else:
+        return render(request, 'breakfast.html', {'error': '不是账号错了就是密码错了!'})
+
+
+def breakfast_logout(request):
+    auth.logout(request)
+    resp = HttpResponseRedirect('/breakfast/')
+    return resp
+
+def breakfast1(request):
+    return render(request,'breakfast1.html')
+
+def breakfast2(request):
+    return render(request,'breakfast2.html')
