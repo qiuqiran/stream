@@ -30,6 +30,11 @@ urlpatterns = [
     url(r'^crawl_action/(\d+)/$',views.crawl_action),
     url(r'^newspaper/$',views.newspaper),
     url(r'^newspaper/(\d+)/$', views.newspaper,name='newspaper'),
+    url(r'^breakfast/$', views.breakfast),
+    url(r'^breakfast_login/$', views.breakfast_login),
+    url(r'^breakfast1/$', views.breakfast1),
+    url(r'^breakfast2/$', views.breakfast2),
+    url(r'^breakfast_logout/$', views.breakfast_logout),
 
     url(r'^crawl_save/(\d+)/$',views.crawl_save),
     url(r'^new_index/$',views.new_index),
