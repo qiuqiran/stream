@@ -344,16 +344,12 @@ def breakfast2(request):
     '''新增页面'''
     return render(request,'breakfast2.html')
 
-def breakfast_create(request,id):
+def breakfast_create(request):
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    if request.method == 'POST':
+
+    xie = Detailed(type='支出',store='岗厦C',price=813,remark='25支出',create_time=now)
+    xie.save()
+    return render(request,'breakfast2.html')
 
 
-        xie = Detailed(type=2,store='岗厦C',price=id,remark='25支出',create_time=now)
-        xie.save()
-        resp = HttpResponseRedirect('/breakfast1/')  # HttpResponseRedirect，它可以对路径进行重定向
-        return resp
-    else:
-        resp = HttpResponseRedirect('/breakfast1/')  # HttpResponseRedirect，它可以对路径进行重定向
-        return resp
 

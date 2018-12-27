@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^breakfast1/$', views.breakfast1),
     url(r'^breakfast2/$', views.breakfast2),
     url(r'^breakfast_logout/$', views.breakfast_logout),
+    url(r'^breakfast_create/$', views.breakfast_create),
+    # url(r'^breakfast_create/(?P<id>[0-9]+)/$', views.breakfast_create),
 
     url(r'^crawl_save/(\d+)/$',views.crawl_save),
     url(r'^new_index/$',views.new_index),
