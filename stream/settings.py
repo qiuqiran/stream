@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7+yej%ob1(3d^c2)s!o(@dq=cv8199pbif=_d(qc6@#ixkxv*m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = ['207.246.77.150'] #线上域名
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['207.246.77.150'] #线上域名
+# ALLOWED_HOSTS = ['*']
 
 
 
@@ -87,13 +87,13 @@ WSGI_APPLICATION = 'stream.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',#驱动
-        'HOST':'127.0.0.1',#本地主机地址
-        # 'HOST': '207.246.77.150',  #美国服务器主机地址
+        # 'HOST':'127.0.0.1',#本地主机地址
+        'HOST': '207.246.77.150',  #美国服务器主机地址
         'POST':'3306',#端口号
         'NAME': 'stream',  # 数据库
         'USER':'root',#用户名
-        # 'PASSWORD': '2167598',  # 美国服务器密码2167598
-        'PASSWORD':'',#密码本地密码空
+        'PASSWORD': '2167598',  # 美国服务器密码2167598
+        # 'PASSWORD':'',#密码本地密码空
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
         },
