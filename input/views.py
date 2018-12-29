@@ -345,11 +345,18 @@ def breakfast2(request):
     return render(request,'breakfast2.html')
 
 def breakfast_create(request):
+    type = request.POST.get('type','类型')
+    store = request.POST.get('store','岗厦C')
+    price = request.POST.get('price','696')
+    remark = request.POST.get('remark','默认标题')
+    other = request.POST.get('other','默认备注')
+
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    xie = Detailed(type='支出',store='岗厦C',price=813,remark='25支出',create_time=now)
+    xie = Detailed(type=type,store=store,price=price,remark=remark,create_time=now,other=other)
     xie.save()
-    return render(request,'breakfast2.html')
+    resp = HttpResponseRedirect('/breakfast1/')
+    return resp
 
 
 
