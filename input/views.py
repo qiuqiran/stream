@@ -322,7 +322,7 @@ def breakfast_logout(request):
     auth.logout(request)
     resp = HttpResponseRedirect('/breakfast/')
     return resp
-
+@login_required()
 def breakfast1(request):
     '''统计页面'''
     detailed = Detailed.objects.order_by('-id')
@@ -339,11 +339,11 @@ def breakfast1(request):
         contacts = paginator.page(Paginator.num_pages)
 
     return render(request, 'breakfast1.html', {'lists': contacts,'detailed_in':detailed_in,'detailed_out':detailed_out})
-
+@login_required()
 def breakfast2(request):
     '''新增页面'''
     return render(request,'breakfast2.html')
-
+@login_required()
 def breakfast_create(request):
     type = request.POST.get('type','类型')
     store = request.POST.get('store','岗厦C')
