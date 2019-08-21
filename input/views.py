@@ -99,32 +99,9 @@ def crawl_manage(request):
 def crawl_action(request,douban_id):
     from input.dcrawl.crawl import Douban_name
     Douban_name = Douban_name(douban_id)#页面获取douban_id，传到crawl.py做爬取
-    return render(request,'crawl_playing.html',{'lists':Douban_name})
+    return render(request,'reptilian_de.html',{'lists':Douban_name})
 
 
-#保存到数据库
-def crawl_save(request,douban_id):
-    from input.dcrawl.crawl import Douban_crawl
-
-    Douban_crawl = Douban_crawl(douban_id)
-    # -----------------电影
-    from input.dcrawl.crawl import new_index_crawl_movie
-    new_index_crawl_movie = new_index_crawl_movie()
-    # -----------------rating_num
-    from input.dcrawl.crawl import new_index_crawl_rating_num
-    new_index_crawl_rating_num = new_index_crawl_rating_num()
-    # ------------------id
-    from input.dcrawl.crawl import Douban_Nowplaying_link_num
-    Douban_Nowplaying_link_num = Douban_Nowplaying_link_num()
-    # ----------------week_top
-    # from input.dcrawl.crawl import new_index_crawl_week_top
-    # new_index_crawl_week_top = new_index_crawl_week_top()
-    # # -------------------na_top
-    # from input.dcrawl.crawl import new_index_crawl_na_top
-    # new_index_crawl_na_top = new_index_crawl_na_top()
-
-    return render(request, 'reptilian.html', {'movies': new_index_crawl_movie, 'rating': new_index_crawl_rating_num,
-                                            'id': Douban_Nowplaying_link_num,'Douban_crawl':Douban_crawl})
 
 
 
@@ -215,26 +192,7 @@ def admin_0(request):
     return render(request,'admin_0.html')
 
 
-@login_required()
-def reptilian(request):
-    # -----------------电影
-    from input.dcrawl.crawl import new_index_crawl_movie
-    new_index_crawl_movie=new_index_crawl_movie()
-    #-----------------rating_num
-    from input.dcrawl.crawl import new_index_crawl_rating_num
-    new_index_crawl_rating_num=new_index_crawl_rating_num()
-    #------------------id
-    from input.dcrawl.crawl import Douban_Nowplaying_link_num
-    Douban_Nowplaying_link_num=Douban_Nowplaying_link_num()
-    #----------------week_top
-    # from input.dcrawl.crawl import new_index_crawl_week_top
-    # new_index_crawl_week_top=new_index_crawl_week_top()
-    # #-------------------na_top
-    # from input.dcrawl.crawl import new_index_crawl_na_top
-    # new_index_crawl_na_top=new_index_crawl_na_top()
 
-    return render(request, 'reptilian.html', {'movies': new_index_crawl_movie,'rating':new_index_crawl_rating_num,
-                                            'id':Douban_Nowplaying_link_num})
 
 
 
@@ -258,8 +216,10 @@ def comment(request,id):
 
 def cover(request):
 
-    movie_mid = Movie_list.objects.order_by('?')#随机获取电影mid_id
-    list = Content.objects.filter(mid=movie_mid[0])#在获取第一个电影里面的短评
+    # movie_mid = Movie_list.objects.order_by('?')#随机获取电影mid_id
+    list = Content.objects.filter(mid=16)#在获取第一个电影里面的短评
+    # list = Content.objects.order_by('?')#随机一条短评
+
 
 
     return render(request,'cover.html', {'lists': list})
@@ -358,5 +318,132 @@ def breakfast_create(request):
     resp = HttpResponseRedirect('/breakfast1/')
     return resp
 
+def grid(request):
+    '''
+    grid 网格页面，2019-8-1
+    :param request:
+    :return:
+    '''
+    return render(request,'grid.html')
 
 
+
+def o4(request):
+
+    return render(request,'o4.html')
+
+def argon_index(request):
+    return render(request,'argon_index.html')
+
+def argon_login(request):
+    '''
+    登录页面
+    :param request:
+    :return:
+    '''
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)  # 登录
+            request.session['user'] = username  # 将 session 信息记录到浏览器
+            resp = HttpResponseRedirect('/dashboard/')  # HttpResponseRedirect，它可以对路径进行重定向
+            return resp
+        else:
+            return render(request, 'argon_index.html', {'error': '登录错误!'})
+    else:
+        return render(request, 'argon_index.html', {'error': '登录失败!'})
+
+
+def argon_logout(request):
+    '''
+    退出
+    :param request:
+    :return:
+    '''
+    auth.logout(request)
+    resp = HttpResponseRedirect('/argon_index/')
+    return resp
+
+def dashboard(request):
+    '''
+
+    :param request:
+    :return:
+    '''
+    return render(request,'dashboard.html')
+
+
+def tables(request):
+    '''
+
+    :param request:
+    :return:
+    '''
+    list = Movie_list.objects.order_by('-id')  # 倒序输出所有电影列表
+    paginator = Paginator(list, 5)  # 每页展示数据数量
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(Paginator.num_pages)
+    return render(request, 'tables.html', {'lists': contacts})
+
+
+def tables_de(request,d):
+    '''
+
+    :param request:
+    :return:
+    '''
+    # username = request.session.get('user','')
+    list = Content.objects.filter(mid=str(d))  # 筛选对应的mid，使用d变量
+    # list =  Content.objects.all()
+    paginator = Paginator(list, 4)  # 每页展示数据数量
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(Paginator.num_pages)
+    return render(request, 'tables_de.html', {'lists': contacts})
+
+def reptilian_de(request):
+    '''
+
+    :param request:
+    :return:
+    '''
+    return render(request, 'reptilian_de.html')
+
+
+@login_required()
+def reptilian(request):
+    '''
+    爬虫页面
+    :param request:
+    :return:
+    '''
+    from input.dcrawl.crawl import Douban_Nowplaying_lists
+    return render(request, 'reptilian_de.html', {'lists': Douban_Nowplaying_lists})
+
+
+
+
+def crawl_save(request,douban_id):
+    '''
+    拿到id，然后去爬取，然后写入数据库
+    :param request:
+    :param douban_id:
+    :return:
+    '''
+    from input.dcrawl.crawl import Douban_crawl
+    from input.dcrawl.crawl import Douban_Nowplaying_lists
+
+    Douban_crawl(douban_id)
+
+    return render(request, 'reptilian_de.html', {'lists': Douban_Nowplaying_lists})

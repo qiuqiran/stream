@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 
+# 电影id基础表
+class Movie_base(models.Model):
+    dou_name = models.CharField(max_length=1000)#豆瓣电影名字
+    dou_id = models.CharField(max_length=1000)  # 豆瓣id
 
 # 电影表
 class Movie_list(models.Model):
@@ -16,6 +20,8 @@ class Content(models.Model):
     mid = models.ForeignKey(Movie_list,on_delete=models.CASCADE)  # 关联电影名字 id
     realname =  models.CharField(max_length=640) # 姓名
     short = models.CharField(max_length=10000)# 电影短评
+    mid_name = models.CharField(max_length=1000)# 关联电影名字
+
 
 
 

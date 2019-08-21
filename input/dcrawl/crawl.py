@@ -3,7 +3,6 @@
 from urllib import request
 import re
 from bs4 import BeautifulSoup
-import pymysql
 from input.models import Movie_list,Content
 
 
@@ -12,9 +11,8 @@ def Douban_Nowplaying_name():
     url = 'https://movie.douban.com/cinema/nowplaying/shenzhen/'
     html = request.urlopen(url).read().decode('utf-8')
     na = re.findall(r'alt="(.*?)" rel="nofollow"', html)
-
-    # print(na)
     return na
+
 
 
 def Douban_Nowplaying_link_num():
@@ -24,8 +22,13 @@ def Douban_Nowplaying_link_num():
     link_num = re.findall(r'<a href="https://movie.douban.com/subject/(.*?)/\?from=playing_poster" class=ticket-btn target="_blank" data-psource="poster">',html)
     return link_num
 
-def Douban_name(douban_id):
 
+def Douban_name(douban_id):
+    '''
+    豆瓣单部电影简介
+    :param douban_id:
+    :return:
+    '''
     douban_id = douban_id  # 豆瓣id，由页面传过来
     surl = 'https://movie.douban.com/subject/' + douban_id + '/?from=showing'  # 首页
     # url = 'https://movie.douban.com/subject/26336252/?from=showing'
@@ -46,6 +49,11 @@ def Douban_name(douban_id):
     return a
 
 def Douban_crawl(douban_id):
+    '''
+    拿到id，去插入数据库
+    :param douban_id:
+    :return:
+    '''
 
     douban_id = douban_id  # 豆瓣id
     page_num = str(20 * 1)  # 页数
@@ -80,7 +88,10 @@ def Douban_crawl(douban_id):
 
 
 def new_index_crawl_realname():
-    #最新评论
+    '''
+    由首页拿取最新的电影id，然后去查看这个部电影的最新3条用户名
+    :return:
+    '''
     url = 'https://movie.douban.com/cinema/nowplaying/shenzhen/'
     html = request.urlopen(url).read().decode('utf-8')
     link_num = re.findall(r'<a href="https://movie.douban.com/subject/(.*?)/\?from=playing_poster" class=ticket-btn target="_blank" data-psource="poster">',html)
@@ -94,7 +105,12 @@ def new_index_crawl_realname():
     a = {'realname1':realname[0],'realname2':realname[1],'realname3':realname[2]}
     return a
 
+
 def new_index_crawl_short():
+    '''
+    由首页拿取最新的电影id，然后去查看这个部电影的最新3条短评
+    :return:
+    '''
     url = 'https://movie.douban.com/cinema/nowplaying/shenzhen/'
     html = request.urlopen(url).read().decode('utf-8')
     link_num = re.findall(
@@ -114,27 +130,32 @@ def new_index_crawl_short():
     b = {'short1':ab1,'short2':ab2,'short3':ab3}
     return b
 
-#最新电影
-def new_index_crawl_movie():
-    url = 'https://movie.douban.com/cinema/nowplaying/shenzhen/'
-    html = request.urlopen(url).read().decode('utf-8')
-    name = re.findall(r'alt="(.*?)" rel="nofollow"', html)
-    return name
 
 def new_index_crawl_img():
+    '''
+    图片
+    :return:
+    '''
     url = 'https://movie.douban.com/cinema/nowplaying/shenzhen/'
     html = request.urlopen(url).read().decode('utf-8')
     img = re.findall(r'<img src="(.*?)"', html)
     return img
 
 def new_index_crawl_rating_num():
+    '''
+    评分
+    :return:
+    '''
     url = 'https://movie.douban.com/cinema/nowplaying/shenzhen/'
     html = request.urlopen(url).read().decode('utf-8')
     rating_num = re.findall(r'<span class="subject-rate">(.*?)</span>',html)
-    # print(rating_num)
     return rating_num
 
 def new_index_crawl_week_top():
+    '''
+    一周口碑榜
+    :return:
+    '''
     url = 'https://movie.douban.com/chart'
     html = request.urlopen(url).read().decode('utf-8')
     soup = BeautifulSoup(html, 'html.parser')
@@ -147,6 +168,11 @@ def new_index_crawl_week_top():
 
 
 def new_index_crawl_na_top():
+    '''
+    北美票房榜
+    :return:
+    '''
+
     url = 'https://movie.douban.com/chart'
     html = request.urlopen(url).read().decode('utf-8')
     soup = BeautifulSoup(html, 'html.parser')
@@ -156,4 +182,18 @@ def new_index_crawl_na_top():
         ab = i.get_text().strip().replace("\n", "")
         l.append(ab)
     return l
-# new_index_crawl_na_top()
+
+def Douban_Nowplaying_lists():
+    '''
+    最新的电影列表，包含id和名字
+    :return:
+    '''
+    name = Douban_Nowplaying_name()
+    id = Douban_Nowplaying_link_num()
+    # rating = new_index_crawl_rating_num()
+    # print(name,id,rating)
+    l = []
+    for i in range(len(id)):
+        # print(name[i],id[i])
+        l.append({'name':name[i],'id':id[i]})
+    return l[0:6]

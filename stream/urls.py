@@ -22,12 +22,13 @@ from input import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.admin_0),
-    url(r'^index/$',views.index),
+    url(r'^$', views.argon_index),
     url(r'^reptilian/login_action/$', views.login_action),
     url(r'^content_page/(\d+)/$',views.content_manage,name='content_manage'),#name=指向views里面
+
     url(r'^crawl/$',views.crawl_manage),
     url(r'^crawl_action/(\d+)/$',views.crawl_action),
+
     url(r'^newspaper/$',views.newspaper),
     url(r'^newspaper/(\d+)/$', views.newspaper,name='newspaper'),
     url(r'^breakfast/$', views.breakfast),
@@ -38,7 +39,6 @@ urlpatterns = [
     url(r'^breakfast_create/$', views.breakfast_create),
     # url(r'^breakfast_create/(?P<id>[0-9]+)/$', views.breakfast_create),
 
-    url(r'^crawl_save/(\d+)/$',views.crawl_save),
     url(r'^new_index/$',views.new_index),
     url(r'^album/$',views.album),
     url(r'^admin_0/$', views.admin_0),
@@ -46,12 +46,25 @@ urlpatterns = [
     url(r'^api_page/$',views.api_page),
     url(r'^comment/(\d+)/$', views.comment),
 
-    # url(r'^api/',include('input.urls',namespace='input')),#配置具体接口的二级路径。
+    url(r'^api/',include('input.urls',)),#配置具体接口的二级路径。
     url(r'^logout/$',views.logout),
     url(r'^cover/$', views.cover),
+    url(r'^grid/$',views.grid),# 2019/8/1 新页面，其他抛掉
     url(r'^film/$',views.film),
     url(r'^cover2/$', views.cover2),
-    # url(r'^cover2/(\d+)/$', views.cover2,name='cover2'),
+
+
+
+    url(r'^argon_index/$', views.argon_index),# 首页
+    url(r'^argon_login/$', views.argon_login),  # 登录动作
+    url(r'^argon_logout/$', views.argon_logout),  # 退出动作
+
+    url(r'^dashboard/$', views.dashboard), # 登录后跳转页面
+    url(r'^tables/$', views.tables),  # 电影列表页面
+    url(r'^tables_de/(\d+)/$', views.tables_de, name='tables_de'),  # name=指向views里面
+    url(r'^reptilian_de/$', views.reptilian), # 爬虫页面
+    url(r'^crawl_save/(\d+)/$', views.crawl_save),
+
 ]
 
 handler404 = views.page_not_found
