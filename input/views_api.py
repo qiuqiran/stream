@@ -113,3 +113,5 @@ def grid(request):
     mid =request.GET.get('mid','')
     datas = {'id': 192, 'mid_name': "叶问外传：张天志 葉問外傳：張天志", 'realname': "二月鸟语", 'short': "现在这些前辈还活在自己的世界里才是真的可怕······"}
     return JsonResponse({'status': 200, 'message': 'success', 'data': datas})
+
+

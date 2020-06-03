@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+# python3 manage.py makemigrations input #数据库迁移
+# python3 manage.py migrate  # 同步数据库
 
 # 电影id基础表
 class Movie_base(models.Model):
@@ -42,4 +44,29 @@ class Detailed(models.Model):
         return self.remark
 
 # 数据表
+
+
+# 模仿祖冲之数据平台
+# 用户表
+# 消费表
+
+# class wen_user(models.Model):
+#     pass
+
+
+class wen_order_record(models.Model):
+    '''
+    消费表
+    '''
+    name = models.CharField(max_length=64) # 名称
+    mobile = models.CharField(max_length=16) # 手机号码
+    order_amount = models.CharField(max_length=16) # 订单金额 单位：元
+    status = models.CharField(max_length=16)#'订单状态  0：待支付  1：已支付  2：取消支付 3：支付失败',
+    remark =  models.CharField(max_length=64)  # 备注
+    pay_time =  models.DateField ()  # 消费时间,日期型，必须是“YYYY-MM-DD”格式
+    create_time =  models.DateTimeField(auto_now=True)  # 创建时间
+
+
+    def __str__(self):
+        return self.remark
 

@@ -326,6 +326,14 @@ def grid(request):
     '''
     return render(request,'grid.html')
 
+def astrology(request):
+    """
+
+    :param request:
+    :return:
+    """
+    return render(request,'astrology.html')
+
 
 
 def o4(request):
